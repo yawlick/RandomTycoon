@@ -1,0 +1,11 @@
+name: RandomTycoon
+version: '1.0'
+main: me.yawlick.tycoon.RandomTycoon
+api-version: '1.16'
+commands:
+  place:
+    aliases:
+      - p
+  roll:
+    aliases:
+      - r
