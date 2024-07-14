@@ -27,6 +27,7 @@ import java.util.UUID;
 public class ServerTickStartListener implements Listener, IPaper {
     @EventHandler
     void onServerTick(ServerTickStartEvent event) {
+        ItemHandler itemHandler = RandomTycoon.INSTANCE.loadModule.getItemHandler();
         for(Player player : Bukkit.getOnlinePlayers()) {
             for(UUID itemUuid : getTycoon(player.getUniqueId()).getItems()) {
                 if(Bukkit.getEntity(itemUuid) == null) {
@@ -79,7 +80,7 @@ public class ServerTickStartListener implements Listener, IPaper {
                                     PersistentDataContainer data = item.getPersistentDataContainer();
                                     String dropperName = data.get(NamespacedKey.fromString("cube.dropper"), PersistentDataType.STRING);
                                     long value = data.get(NamespacedKey.fromString("cube.value"), PersistentDataType.LONG);
-                                    msg(player, "+" + value + "$ §6от " + LoadModule.itemHandler.getDropper(dropperName).cubeName);
+                                    msg(player, "+" + value + "$ §6от " + itemHandler.getDropper(dropperName).cubeName);
                                     getTycoon(player.getUniqueId()).removeItem(itemUuid);
                                     item.remove();
                                 }
@@ -100,9 +101,9 @@ public class ServerTickStartListener implements Listener, IPaper {
                                 return;
                             }
                             String dropperName = data.get(NamespacedKey.fromString("cube.dropper"), PersistentDataType.STRING);
-                            long newValue = data.get(NamespacedKey.fromString("cube.value"), PersistentDataType.LONG) * LoadModule.itemHandler.firstUpgrader.boost;
+                            long newValue = data.get(NamespacedKey.fromString("cube.value"), PersistentDataType.LONG) * itemHandler.firstUpgrader.boost;
                             data.set(NamespacedKey.fromString("cube.value"), PersistentDataType.LONG, newValue);
-                            item.setCustomName("§6" + LoadModule.itemHandler.getDropper(dropperName).cubeName + " §a" + newValue + "$");
+                            item.setCustomName("§6" + itemHandler.getDropper(dropperName).cubeName + " §a" + newValue + "$");
                             data.set(NamespacedKey.fromString("x:" + blockIn.getX()), PersistentDataType.INTEGER, 1);
                             data.set(NamespacedKey.fromString("y:" + blockIn.getY()), PersistentDataType.INTEGER, 1);
                             data.set(NamespacedKey.fromString("z:" + blockIn.getZ()), PersistentDataType.INTEGER, 1);

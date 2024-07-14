@@ -61,7 +61,7 @@ public class RollCommand implements CommandExecutor, IPaper {
     }
 
     public HashMap<AbstractItem, Float> getHashMap() {
-        ItemHandler items = LoadModule.itemHandler;
+        ItemHandler items = RandomTycoon.INSTANCE.getLoadModule().getItemHandler();
         HashMap<AbstractItem, Float> map = new HashMap();
 
         for(AbstractItem item : items.getAllItems()) {

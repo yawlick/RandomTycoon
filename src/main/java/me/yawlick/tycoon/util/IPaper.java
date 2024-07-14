@@ -1,5 +1,6 @@
 package me.yawlick.tycoon.util;
 
+import me.yawlick.tycoon.item.ItemHandler;
 import me.yawlick.tycoon.tycoon.player.PlayerData;
 import me.yawlick.tycoon.tycoon.TycoonHandler;
 import org.bukkit.Bukkit;
