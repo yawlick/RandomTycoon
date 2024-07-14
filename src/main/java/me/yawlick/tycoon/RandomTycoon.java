@@ -1,12 +1,10 @@
 package me.yawlick.tycoon;
 
-import me.yawlick.tycoon.player.PlayerData;
-import me.yawlick.tycoon.player.TycoonHandler;
+import me.yawlick.tycoon.tycoon.TycoonHandler;
 import me.yawlick.tycoon.util.IPaper;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.UUID;
 

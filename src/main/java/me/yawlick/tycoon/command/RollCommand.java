@@ -28,7 +28,7 @@ public class RollCommand implements CommandExecutor, IPaper {
         Player player = (Player) commandSender;
         Random random = new Random("btwkgay".getBytes().length * System.currentTimeMillis());
         HashMap<AbstractItem, Float> map = getHashMap();
-
+        getData(player.getUniqueId()).setRolls(getData(player.getUniqueId()).getRolls() + 1);
         for(int i = 0; i < 5; i++) {
             int i2 = i;
             Bukkit.getScheduler().scheduleSyncDelayedTask(RandomTycoon.INSTANCE, new Runnable() {

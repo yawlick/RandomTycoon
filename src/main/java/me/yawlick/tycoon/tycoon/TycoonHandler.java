@@ -1,15 +1,15 @@
-package me.yawlick.tycoon.player;
+package me.yawlick.tycoon.tycoon;
 
 import me.yawlick.tycoon.RandomTycoon;
 import me.yawlick.tycoon.item.AbstractItem;
+import me.yawlick.tycoon.item.ItemType;
 import me.yawlick.tycoon.item.dropper.Dropper;
 import me.yawlick.tycoon.item.seller.Seller;
 import me.yawlick.tycoon.item.upgrader.Upgrader;
+import me.yawlick.tycoon.tycoon.player.PlayerData;
 import me.yawlick.tycoon.util.BlockPos;
 import me.yawlick.tycoon.util.IPaper;
 import net.kyori.adventure.text.Component;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
@@ -22,6 +22,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import javax.annotation.Nonnull;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
@@ -50,6 +51,16 @@ public class TycoonHandler implements IPaper {
         sellersInventory = Bukkit.createInventory(null, 9, "§2Ваши §6Продавцы§2:");
         upgradersInventory = Bukkit.createInventory(null, 9, "§2Ваши §6Улучшатели§2:");
         locations = new ArrayList<>();
+    }
+
+    public void placeItem(AbstractItem item, BlockPos blockPos) {
+        if(item.type == ItemType.DROPPER) {
+            placeDropper((Dropper) item, blockPos);
+        } else if(item.type == ItemType.SELLER) {
+            placeSeller((Seller) item, blockPos);
+        } else if(item.type == ItemType.UPGRADER) {
+            placeUpgrader((Upgrader) item, blockPos);
+        }
     }
 
     public void placeDropper(Dropper dropper, BlockPos blockPos) {

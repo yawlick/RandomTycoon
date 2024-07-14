@@ -1,14 +1,10 @@
-package me.yawlick.tycoon.player;
+package me.yawlick.tycoon.tycoon.player;
 
 import me.yawlick.tycoon.item.AbstractItem;
 import me.yawlick.tycoon.item.ItemType;
 import me.yawlick.tycoon.util.IPaper;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -62,10 +58,9 @@ public class PlayerData implements IPaper {
         lore.add("§7§l" + abstractItem.type.name);
         ItemStack itemStack = new ItemStack(abstractItem.material, 1);
         ItemMeta meta = itemStack.getItemMeta();
-        PersistentDataContainer data = meta.getPersistentDataContainer();
-        data.set(NamespacedKey.fromString("item.type"), PersistentDataType.STRING, abstractItem.type.name);
-        data.set(NamespacedKey.fromString("item.name"), PersistentDataType.STRING, abstractItem.name);
-        data.set(NamespacedKey.fromString("item.uuid"), PersistentDataType.STRING, abstractItem.uuid.toString());
+        writeNBT(itemStack, "item.type", abstractItem.type.name);
+        writeNBT(itemStack, "item.name", abstractItem.name);
+        writeNBT(itemStack, "item.uuid", abstractItem.uuid.toString());
         meta.setDisplayName("§6§l" + abstractItem.name);
         meta.setLore(lore);
         itemStack.setItemMeta(meta);
