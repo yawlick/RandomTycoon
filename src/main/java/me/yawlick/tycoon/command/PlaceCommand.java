@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import me.yawlick.tycoon.LoadModule;
 import me.yawlick.tycoon.RandomTycoon;
+import me.yawlick.tycoon.item.ItemHandler;
 import me.yawlick.tycoon.util.BlockPos;
 import me.yawlick.tycoon.util.IPaper;
 import me.yawlick.tycoon.util.TycoonBlock;
@@ -30,41 +31,42 @@ public class PlaceCommand implements CommandExecutor, IPaper {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        ItemHandler itemHandler = RandomTycoon.INSTANCE.loadModule.getItemHandler();
         if(args.length > 1) {
             if(args[0].equalsIgnoreCase("dropper")) {
-                if(LoadModule.itemHandler.getDropper(args[1]) != null) {
+                if(itemHandler.getDropper(args[1]) != null) {
                     if(!(commandSender instanceof Player))
                         return false;
                     Player player = (Player) commandSender;
                     Location loc = player.getLocation();
                     getTycoon(player).placeDropper(
-                            LoadModule.itemHandler.firstDropper,
+                            itemHandler.firstDropper,
                             new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())
                     );
                 }
             }
 
             if(args[0].equalsIgnoreCase("seller")) {
-                if(LoadModule.itemHandler.getSeller(args[1]) != null) {
+                if(itemHandler.getSeller(args[1]) != null) {
                     if(!(commandSender instanceof Player))
                         return false;
                     Player player = (Player) commandSender;
                     Location loc = player.getLocation();
                     Objects.requireNonNull(getTycoon(player)).placeSeller(
-                            LoadModule.itemHandler.firstSeller,
+                            itemHandler.firstSeller,
                             new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())
                     );
                 }
             }
 
             if(args[0].equalsIgnoreCase("upgrader")) {
-                if(LoadModule.itemHandler.getUpgrader(args[1]) != null) {
+                if(itemHandler.getUpgrader(args[1]) != null) {
                     if(!(commandSender instanceof Player))
                         return false;
                     Player player = (Player) commandSender;
                     Location loc = player.getLocation();
                     Objects.requireNonNull(getTycoon(player)).placeUpgrader(
-                            LoadModule.itemHandler.firstUpgrader,
+                            itemHandler.firstUpgrader,
                             new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())
                     );
                 }

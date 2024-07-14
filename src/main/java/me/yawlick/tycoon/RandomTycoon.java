@@ -11,7 +11,7 @@ import java.util.UUID;
 public final class RandomTycoon extends JavaPlugin implements IPaper {
     public static RandomTycoon INSTANCE;
     public static HashMap<UUID, TycoonHandler> DATASTORE = new HashMap<>();
-    public static LoadModule loadModule;
+    public LoadModule loadModule;
 
     @Override
     public void onEnable() {
@@ -30,5 +30,9 @@ public final class RandomTycoon extends JavaPlugin implements IPaper {
         for(Listener listener : listeners) {
             getServer().getPluginManager().registerEvents(listener, this);
         }
+    }
+
+    public LoadModule getLoadModule() {
+        return loadModule;
     }
 }

@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class LoadModule implements IPaper {
-    public static ItemHandler itemHandler;
+    private ItemHandler itemHandler;
 
     public void load() {
         itemHandler = new ItemHandler();
@@ -39,5 +39,9 @@ public class LoadModule implements IPaper {
         for(ArmorStand stand : Bukkit.getWorld("world").getEntitiesByClass(ArmorStand.class)) {
             stand.remove();
         }
+    }
+
+    public ItemHandler getItemHandler() {
+        return itemHandler;
     }
 }

@@ -1,6 +1,8 @@
 package me.yawlick.tycoon.listener;
 
 import me.yawlick.tycoon.LoadModule;
+import me.yawlick.tycoon.RandomTycoon;
+import me.yawlick.tycoon.item.ItemHandler;
 import me.yawlick.tycoon.item.ItemType;
 import me.yawlick.tycoon.tycoon.TycoonHandler;
 import me.yawlick.tycoon.util.BlockPos;
@@ -19,10 +21,11 @@ public class InventoryItemClickListener implements Listener, IPaper {
     void onItemClick(InventoryClickEvent event) {
         if(event.getInventory().getSize() == 9) {
             ItemStack item = event.getCurrentItem();
-            PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-            ItemType type = getItemType(data.get(NamespacedKey.fromString("item.type"), PersistentDataType.STRING));
-            String name = data.get(NamespacedKey.fromString("item.name"), PersistentDataType.STRING);
+            ItemType type = getItemType(readNBT(item, "item.type", new String()));
+            String name = readNBT(item, "item.name", new String());
             TycoonHandler tycoonHandler = getTycoon(event.getWhoClicked().getUniqueId());
+            BlockPos blockPos = new BlockPos(tycoonHandler.getLastClickedBlock().getX(), tycoonHandler.getLastClickedBlock().getY(), tycoonHandler.getLastClickedBlock().getZ());
+            ItemHandler itemHandler = RandomTycoon.INSTANCE.loadModule.getItemHandler();
             if(item.getAmount() > 1) {
                 item.setAmount(item.getAmount() - 1);
             } else {
@@ -32,20 +35,20 @@ public class InventoryItemClickListener implements Listener, IPaper {
             }
             if(type == ItemType.DROPPER) {
                 tycoonHandler.placeDropper(
-                        LoadModule.itemHandler.getDropper(name),
-                        new BlockPos(tycoonHandler.getLastClickedBlock().getX(), tycoonHandler.getLastClickedBlock().getY(), tycoonHandler.getLastClickedBlock().getZ())
+                        itemHandler.getDropper(name),
+                        blockPos
                 );
             }
             if(type == ItemType.SELLER) {
                 tycoonHandler.placeSeller(
-                        LoadModule.itemHandler.getSeller(name),
-                        new BlockPos(tycoonHandler.getLastClickedBlock().getX(), tycoonHandler.getLastClickedBlock().getY(), tycoonHandler.getLastClickedBlock().getZ())
+                        itemHandler.getSeller(name),
+                        blockPos
                 );
             }
             if(type == ItemType.UPGRADER) {
                 tycoonHandler.placeUpgrader(
-                        LoadModule.itemHandler.getUpgrader(name),
-                        new BlockPos(tycoonHandler.getLastClickedBlock().getX(), tycoonHandler.getLastClickedBlock().getY(), tycoonHandler.getLastClickedBlock().getZ())
+                        itemHandler.getUpgrader(name),
+                        blockPos
                 );
             }
             event.getClickedInventory().close();

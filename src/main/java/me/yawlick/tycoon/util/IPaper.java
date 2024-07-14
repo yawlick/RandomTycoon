@@ -143,6 +143,10 @@ public interface IPaper {
         return DATASTORE.getOrDefault(playerUuid, null);
     }
 
+    @Nullable default TycoonHandler getTycoon(Player player) {
+        return DATASTORE.getOrDefault(player.getUniqueId(), null);
+    }
+
     @Nullable default PlayerData getData(CommandSender commandSender) {
         return DATASTORE.getOrDefault(((Player) commandSender).getUniqueId(), null).getData();
     }

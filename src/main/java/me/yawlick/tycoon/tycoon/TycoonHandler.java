@@ -15,14 +15,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import javax.annotation.Nonnull;
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
@@ -36,6 +34,7 @@ public class TycoonHandler implements IPaper {
     @Nonnull private final Inventory sellersInventory;
     @Nonnull private final Inventory upgradersInventory;
     @Nonnull private final ArrayList<Location> locations;
+    @Nonnull private final Player player;
     private Block lastClickedBlock = null;
 
     public TycoonHandler(UUID uuid) {
@@ -46,6 +45,7 @@ public class TycoonHandler implements IPaper {
                 0L,
                 0
         );
+        player = Bukkit.getPlayer(owner);
         items = new ArrayList<>();
         droppersInventory = Bukkit.createInventory(null, 9, "§2Ваши §6Дропперы§2:");
         sellersInventory = Bukkit.createInventory(null, 9, "§2Ваши §6Продавцы§2:");
@@ -67,7 +67,7 @@ public class TycoonHandler implements IPaper {
         Block block = world.getBlockAt((int) blockPos.getX(), (int) blockPos.getY(), (int) blockPos.getZ());
         Block under = world.getBlockAt(block.getLocation().add(0.0, -1.0, 0.0));
         if(under.getType() != Material.AIR) {
-            Bukkit.getPlayer(owner).kick(Component.text("§с§lВы §сне§с §сможете §споставить §ссюда §6Дроппер §с>=("));
+            player.kick(Component.text("§с§lВы §сне§с §сможете §споставить §ссюда §6Дроппер §с>=("));
             return;
         }
         block.setType(dropper.material);
@@ -87,7 +87,7 @@ public class TycoonHandler implements IPaper {
         dropper.stand.setGravity(false);
         dropper.stand.setCustomName("§6Дроппер §l" + dropper.name);
         dropper.placed = true;
-        playSound(Bukkit.getPlayer(owner), Sound.ENTITY_VILLAGER_TRADE);
+        playSound(player, Sound.ENTITY_VILLAGER_TRADE);
         msg(owner, "Вы успешно поставили §6Дроппер " + dropper.name + "§a!");
         dropper.scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(RandomTycoon.INSTANCE, new Runnable() {
             @Override
@@ -103,9 +103,8 @@ public class TycoonHandler implements IPaper {
                 item.setCanMobPickup(false);
                 item.setCustomNameVisible(true);
                 item.setCustomName("§6" + dropper.cubeName + " §a" + dropper.cubeValue + "$");
-                PersistentDataContainer data = item.getPersistentDataContainer();
-                data.set(NamespacedKey.fromString("cube.value"), PersistentDataType.LONG, dropper.cubeValue);
-                data.set(NamespacedKey.fromString("cube.dropper"), PersistentDataType.STRING, dropper.name);
+                writeNBT(itemStack, "cube.value", dropper.cubeValue);
+                writeNBT(itemStack, "cube.value", dropper.name);
                 items.add(item.getUniqueId());
             }
         }, dropper.dropperSpeed * 2, dropper.dropperSpeed); // тут желательно потом сделать что бы меньше тпс = меньше кд в тиках
@@ -116,7 +115,7 @@ public class TycoonHandler implements IPaper {
         Block block = world.getBlockAt((int) blockPos.getX(), (int) blockPos.getY(), (int) blockPos.getZ());
         Block under = world.getBlockAt(block.getLocation().add(0.0, -1.0, 0.0));
         if(under.getType() != Material.LIME_SHULKER_BOX) {
-            Bukkit.getPlayer(owner).kick(Component.text("§с§lВы §сне§с §сможете §споставить §ссюда §6Продавца §с>=("));
+            player.kick(Component.text("§с§lВы §сне§с §сможете §споставить §ссюда §6Продавца §с>=("));
             return;
         }
         block.setType(seller.material);
@@ -136,7 +135,7 @@ public class TycoonHandler implements IPaper {
         seller.stand.setGravity(false);
         seller.stand.setCustomName("§6Продавец §l" + seller.name);
         seller.placed = true;
-        playSound(Bukkit.getPlayer(owner), Sound.ENTITY_VILLAGER_TRADE);
+        playSound(player, Sound.ENTITY_VILLAGER_TRADE);
         locations.add(block.getLocation());
     }
 
@@ -144,7 +143,7 @@ public class TycoonHandler implements IPaper {
         Block block = world.getBlockAt((int) blockPos.getX(), (int) blockPos.getY(), (int) blockPos.getZ());
         Block under = world.getBlockAt(block.getLocation().add(0.0, -1.0, 0.0));
         if(under.getType() != Material.MAGENTA_GLAZED_TERRACOTTA) {
-            Bukkit.getPlayer(owner).kick(Component.text("§с§lВы §сне§с §сможете §споставить §ссюда §6Улучшатель §с>=("));
+            player.kick(Component.text("§с§lВы §сне§с §сможете §споставить §ссюда §6Улучшатель §с>=("));
             return;
         }
         block.setType(upgrader.material);
@@ -164,7 +163,7 @@ public class TycoonHandler implements IPaper {
         upgrader.stand.setGravity(false);
         upgrader.stand.setCustomName("§6Улучшатель §l" + upgrader.name);
         upgrader.placed = true;
-        playSound(Bukkit.getPlayer(owner), Sound.ENTITY_VILLAGER_TRADE);
+        playSound(player, Sound.ENTITY_VILLAGER_TRADE);
         locations.add(block.getLocation());
     }
 
